@@ -1,34 +1,21 @@
 // llmNode.js
+// LLM node — two target handles (system, prompt) and one source handle (response).
+// No editable fields — just a display node.
 
-import { Handle, Position } from 'reactflow';
+import { Position } from 'reactflow';
+import BaseNode from './BaseNode';
 
 export const LLMNode = ({ id, data }) => {
+  // Define handles: two targets on the left (system + prompt), one source on the right
+  const handles = [
+    { type: 'target', position: Position.Left, id: `${id}-system`, style: { top: `${100 / 3}%` } },
+    { type: 'target', position: Position.Left, id: `${id}-prompt`, style: { top: `${200 / 3}%` } },
+    { type: 'source', position: Position.Right, id: `${id}-response` },
+  ];
 
   return (
-    <div style={{width: 200, height: 80, border: '1px solid black'}}>
-      <Handle
-        type="target"
-        position={Position.Left}
-        id={`${id}-system`}
-        style={{top: `${100/3}%`}}
-      />
-      <Handle
-        type="target"
-        position={Position.Left}
-        id={`${id}-prompt`}
-        style={{top: `${200/3}%`}}
-      />
-      <div>
-        <span>LLM</span>
-      </div>
-      <div>
-        <span>This is a LLM.</span>
-      </div>
-      <Handle
-        type="source"
-        position={Position.Right}
-        id={`${id}-response`}
-      />
-    </div>
+    <BaseNode label="LLM" handles={handles}>
+      <span>This is a LLM.</span>
+    </BaseNode>
   );
-}
+};

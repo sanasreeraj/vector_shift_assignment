@@ -1,25 +1,39 @@
 // ui.js
-// Displays the drag-and-drop UI
+// Displays the drag-and-drop ReactFlow canvas with all registered node types.
 // --------------------------------------------------
 
 import { useState, useRef, useCallback } from 'react';
 import ReactFlow, { Controls, Background, MiniMap } from 'reactflow';
 import { useStore } from './store';
 import { shallow } from 'zustand/shallow';
+
+// Import all node components
 import { InputNode } from './nodes/inputNode';
 import { LLMNode } from './nodes/llmNode';
 import { OutputNode } from './nodes/outputNode';
 import { TextNode } from './nodes/textNode';
+import { FilterNode } from './nodes/filterNode';
+import { MergerNode } from './nodes/mergerNode';
+import { TimerNode } from './nodes/timerNode';
+import { APINode } from './nodes/apiNode';
+import { NoteNode } from './nodes/noteNode';
 
 import 'reactflow/dist/style.css';
 
 const gridSize = 20;
 const proOptions = { hideAttribution: true };
+
+// Register all 9 node types — keys must match the `type` used in DraggableNode
 const nodeTypes = {
   customInput: InputNode,
   llm: LLMNode,
   customOutput: OutputNode,
   text: TextNode,
+  filter: FilterNode,
+  merger: MergerNode,
+  timer: TimerNode,
+  api: APINode,
+  note: NoteNode,
 };
 
 const selector = (state) => ({
@@ -45,6 +59,7 @@ export const PipelineUI = () => {
       onConnect
     } = useStore(selector, shallow);
 
+    // Build initial data for a newly dropped node
     const getInitNodeData = (nodeID, type) => {
       let nodeData = { id: nodeID, nodeType: `${type}` };
       return nodeData;
@@ -90,7 +105,7 @@ export const PipelineUI = () => {
 
     return (
         <>
-        <div ref={reactFlowWrapper} style={{width: '100wv', height: '70vh'}}>
+        <div ref={reactFlowWrapper} style={{width: '100vw', height: '70vh'}}>
             <ReactFlow
                 nodes={nodes}
                 edges={edges}

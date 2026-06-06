@@ -40,13 +40,13 @@ export const useStore = create((set, get) => ({
         edges: addEdge({...connection, type: 'smoothstep', animated: true, markerEnd: {type: MarkerType.Arrow, height: '20px', width: '20px'}}, get().edges),
       });
     },
+    // Update a specific field on a node's data — returns a new object to avoid mutation
     updateNodeField: (nodeId, fieldName, fieldValue) => {
       set({
         nodes: get().nodes.map((node) => {
           if (node.id === nodeId) {
-            node.data = { ...node.data, [fieldName]: fieldValue };
+            return { ...node, data: { ...node.data, [fieldName]: fieldValue } };
           }
-  
           return node;
         }),
       });

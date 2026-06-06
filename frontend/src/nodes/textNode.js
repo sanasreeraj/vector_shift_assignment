@@ -58,8 +58,9 @@ export const TextNode = ({ id, data }) => {
           onChange={handleTextChange}
           rows={1}
           style={{
-            // Dynamic width: grows with text length, clamped between 180px and 400px
-            width: Math.max(180, Math.min(currText.length * 7 + 40, 400)),
+            // Dynamic minWidth forces the parent to grow, but width: 100% from CSS ensures it fills the node perfectly without weird right-side gaps.
+            minWidth: `${Math.max(180, Math.min(currText.length * 7 + 40, 400))}px`,
+            maxWidth: '400px',
             overflow: 'hidden',
           }}
         />

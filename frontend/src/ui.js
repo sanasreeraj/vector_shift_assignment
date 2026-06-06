@@ -3,7 +3,8 @@
 // --------------------------------------------------
 
 import { useState, useRef, useCallback } from 'react';
-import ReactFlow, { Controls, Background, MiniMap } from 'reactflow';
+import { DraggableMiniMap } from './DraggableMiniMap';
+import ReactFlow, { Controls, Background } from 'reactflow';
 import { useStore } from './store';
 import { shallow } from 'zustand/shallow';
 
@@ -122,7 +123,7 @@ export const PipelineUI = () => {
             >
                 <Background color="#aaa" gap={gridSize} />
                 <Controls />
-                <MiniMap />
+                <DraggableMiniMap />
             </ReactFlow>
         </div>
         </>

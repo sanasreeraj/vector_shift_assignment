@@ -2,15 +2,26 @@
 // Shared wrapper component for all pipeline nodes.
 // Eliminates boilerplate — each node just provides a label, handles, and inner content.
 
-import { Handle } from 'reactflow';
+import { Handle, useNodeId } from 'reactflow';
+import { useStore } from '../store';
 
 // BaseNode renders: container → title bar → children → Handles
 const BaseNode = ({ label, handles = [], children }) => {
+  const nodeId = useNodeId();
+  const removeNode = useStore((state) => state.removeNode);
+
   return (
     <div className="base-node">
       {/* Node title bar */}
       <div className="base-node-header">
         <span className="base-node-title">{label}</span>
+        <button 
+          className="node-delete-btn" 
+          onClick={() => removeNode(nodeId)}
+          title="Delete Node"
+        >
+          ×
+        </button>
       </div>
 
       {/* Node-specific content — nodrag prevents form interactions from dragging the node */}

@@ -14,7 +14,11 @@ export const SubmitButton = () => {
 
     const handleSubmit = async () => {
         try {
-            const response = await fetch('http://localhost:8000/pipelines/parse', {
+            const endpoint = process.env.NODE_ENV === 'production' 
+                ? '/pipelines/parse' 
+                : 'http://localhost:8000/pipelines/parse';
+                
+            const response = await fetch(endpoint, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

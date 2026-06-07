@@ -2,7 +2,7 @@
 
 A full-stack node-based pipeline builder application. This project features a React frontend utilizing **ReactFlow** and **Zustand** for state management, paired with a **Python/FastAPI** backend for graph processing and Directed Acyclic Graph (DAG) validation.
 
-## ✨ Features Implemented
+## Features Implemented
 
 ### 1. Node Abstraction
 * Created a highly reusable `BaseNode` component that eliminates boilerplate code.
@@ -26,7 +26,7 @@ A full-stack node-based pipeline builder application. This project features a Re
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 * Node.js (v14 or higher)

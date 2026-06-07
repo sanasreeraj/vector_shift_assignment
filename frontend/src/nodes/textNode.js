@@ -13,7 +13,8 @@ import { useStore } from '../store';
 const VARIABLE_REGEX = /\{\{\s*([a-zA-Z_$][a-zA-Z0-9_$]*)\s*\}\}/g;
 
 export const TextNode = ({ id, data }) => {
-  const currText = data?.text || '{{input}}';
+  // Fix 1: Use `??` instead of `||` so an empty string `""` isn't replaced by '{{input}}' when backspacing.
+  const currText = data?.text ?? '{{input}}';
   const updateNodeField = useStore((state) => state.updateNodeField);
   const textareaRef = useRef(null);
 
@@ -24,6 +25,8 @@ export const TextNode = ({ id, data }) => {
   const variables = useMemo(() => {
     const matches = [];
     let match;
+    // Fix 2: Reset the global regex lastIndex before executing, so it doesn't miss matches after pasting.
+    VARIABLE_REGEX.lastIndex = 0;
     while ((match = VARIABLE_REGEX.exec(currText)) !== null) {
       if (!matches.includes(match[1])) {
         matches.push(match[1]);
@@ -36,9 +39,12 @@ export const TextNode = ({ id, data }) => {
   useEffect(() => {
     const textarea = textareaRef.current;
     if (textarea) {
-      // Reset height to measure scrollHeight accurately
+      // Fix 3: Ensure height never shrinks below the actual scrollHeight content.
       textarea.style.height = 'auto';
-      textarea.style.height = textarea.scrollHeight + 'px';
+      textarea.style.minHeight = '0px'; // Temporarily reset to get true scrollHeight
+      const scrollHeight = textarea.scrollHeight;
+      textarea.style.height = scrollHeight + 'px';
+      textarea.style.minHeight = scrollHeight + 'px'; // Lock minHeight so drag&extend can't hide text
     }
   }, [currText]);
 
@@ -58,10 +64,9 @@ export const TextNode = ({ id, data }) => {
           onChange={handleTextChange}
           rows={1}
           style={{
-            // Dynamic minWidth forces the parent to grow, but width: 100% from CSS ensures it fills the node perfectly without weird right-side gaps.
-            minWidth: `${Math.max(180, Math.min(currText.length * 7 + 40, 400))}px`,
-            maxWidth: '400px',
-            overflow: 'hidden',
+            // Fix 4: Use `width` instead of `minWidth/maxWidth` lock.
+            // This allows the user to drag&extend to reduce the width without it getting permanently stuck at 400px.
+            width: `${Math.max(200, Math.min(currText.length * 8 + 40, 400))}px`,
           }}
         />
       </label>
